@@ -1,4 +1,5 @@
 import { useState } from "react";
+import * as XLSX from "xlsx";
 import Footer from "../components/Footer.jsx";
 import SimplePie from "../components/charts/SimplePie.jsx";
 import SimpleBar from "../components/charts/SimpleBar.jsx";
@@ -49,6 +50,13 @@ export default function Preview({ onBack }) {
     { faixa: "45–54", outdoor: 0.36, abrigos: 0.33, elev: 0.31 },
   ];
 
+  const crossTable = [
+    { faixa: "18–24", A: 12, B: 24, C: 36, DE: 28 },
+    { faixa: "25–34", A: 18, B: 30, C: 32, DE: 20 },
+    { faixa: "35–44", A: 22, B: 28, C: 30, DE: 20 },
+    { faixa: "45–54", A: 20, B: 25, C: 35, DE: 20 },
+  ];
+
   const pieData = [
     { name: "Outdoor", value: 42 },
     { name: "Abrigos", value: 26 },
@@ -80,6 +88,18 @@ export default function Preview({ onBack }) {
     URL.revokeObjectURL(url);
   }
 
+  function exportExcel() {
+    const ws = XLSX.utils.json_to_sheet(tableAges.map((r) => ({
+      "Faixa Etária": r.faixa,
+      Outdoor: (r.outdoor * 100).toFixed(0) + "%",
+      Abrigos: (r.abrigos * 100).toFixed(0) + "%",
+      Elevadores: (r.elev * 100).toFixed(0) + "%",
+    })));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Faixa etária x Formato");
+    XLSX.writeFile(wb, "preview.xlsx");
+  }
+
   return (
     <>
       <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
@@ -92,33 +112,30 @@ export default function Preview({ onBack }) {
           </div>
         </div>
 
-        {/* KPIs */}
-        {/* KPIs */}
-<div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-  <div className="card p-4">
-    <div className="text-gray-400 text-xs">Base (N)</div>
-    <div className="text-2xl font-bold">
-      {N.toLocaleString("pt-BR")}
-    </div>
-  </div>
-  <div className="card p-4">
-    <div className="text-gray-400 text-xs">Penetração</div>
-    <div className="text-2xl font-bold">
-      {(pen * 100).toFixed(1)}%
-    </div>
-  </div>
-  <div className="card p-4">
-    <div className="text-gray-400 text-xs">Índice Afinidade</div>
-    <div className="text-2xl font-bold">{afin}</div>
-  </div>
-  <div className="card p-4">
-    <div className="text-gray-400 text-xs">Alcance estimado</div>
-    <div className="text-2xl font-bold">
-      {(reach * 100).toFixed(0)}%
-    </div>
-  </div>
-</div>
+        {/* Fonte */}
+        <div className="text-xs text-gray-500 dark:text-gray-400">
+          Fonte: TGI 2024.2 • Dados fictícios
+        </div>
 
+        {/* KPIs */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="card p-4">
+            <div className="text-gray-400 text-xs">Base (N)</div>
+            <div className="text-2xl font-bold">{N.toLocaleString("pt-BR")}</div>
+          </div>
+          <div className="card p-4">
+            <div className="text-gray-400 text-xs">Penetração</div>
+            <div className="text-2xl font-bold">{(pen * 100).toFixed(1)}%</div>
+          </div>
+          <div className="card p-4">
+            <div className="text-gray-400 text-xs">Índice Afinidade</div>
+            <div className="text-2xl font-bold">{afin}</div>
+          </div>
+          <div className="card p-4">
+            <div className="text-gray-400 text-xs">Alcance estimado</div>
+            <div className="text-2xl font-bold">{(reach * 100).toFixed(0)}%</div>
+          </div>
+        </div>
 
         {/* Paleta */}
         <div className="card p-4">
@@ -132,15 +149,13 @@ export default function Preview({ onBack }) {
               >
                 <span className="capitalize">{key}</span>
                 <span className="inline-flex items-center gap-1 ml-2">
-                  {palettes[key]
-                    .slice(0, 5)
-                    .map((c, i) => (
-                      <span
-                        key={i}
-                        className="w-3 h-3 rounded-sm"
-                        style={{ background: c }}
-                      />
-                    ))}
+                  {palettes[key].map((c, i) => (
+                    <span
+                      key={i}
+                      className="w-3 h-3 rounded-sm"
+                      style={{ background: c }}
+                    />
+                  ))}
                 </span>
               </button>
             ))}
@@ -150,9 +165,7 @@ export default function Preview({ onBack }) {
         {/* Mini tabela */}
         <div className="card p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">
-              Distribuição por faixa etária × formato
-            </h3>
+            <h3 className="font-semibold">Distribuição por faixa etária × formato</h3>
             <div className="text-xs text-gray-400">valores em %</div>
           </div>
           <table className="w-full text-sm table-preview">
@@ -164,58 +177,69 @@ export default function Preview({ onBack }) {
                 <th>Elevadores</th>
               </tr>
             </thead>
-<tbody>
-  {tableAges.map((r) => (
-    <tr key={r.faixa} className="border-t border-gray-300 dark:border-gray-800">
-      <td>{r.faixa}</td>
-      <td>{(r.outdoor * 100).toFixed(0)}%</td>
-      <td>{(r.abrigos * 100).toFixed(0)}%</td>
-      <td>{(r.elev * 100).toFixed(0)}%</td>
-    </tr>
-  ))}
-</tbody>
+            <tbody>
+              {tableAges.map((r) => (
+                <tr key={r.faixa}>
+                  <td>{r.faixa}</td>
+                  <td>{(r.outdoor * 100).toFixed(0)}%</td>
+                  <td>{(r.abrigos * 100).toFixed(0)}%</td>
+                  <td>{(r.elev * 100).toFixed(0)}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
+        {/* Tabela cruzada */}
+        <div className="card p-6">
+          <h3 className="font-semibold mb-4">Faixa etária × Classe Social</h3>
+          <table className="w-full text-sm table-preview">
+            <thead>
+              <tr>
+                <th>Faixa</th>
+                <th>A</th>
+                <th>B</th>
+                <th>C</th>
+                <th>DE</th>
+              </tr>
+            </thead>
+            <tbody>
+              {crossTable.map((r) => (
+                <tr key={r.faixa}>
+                  <td>{r.faixa}</td>
+                  <td>{r.A}%</td>
+                  <td>{r.B}%</td>
+                  <td>{r.C}%</td>
+                  <td>{r.DE}%</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
 
         {/* Gráficos */}
         <div className="grid md:grid-cols-2 gap-6">
           <div className="card p-4">
-            <div className="text-sm text-gray-400 mb-2">
-              Participação por formato
-            </div>
-            <button
-              className="btn btn-secondary"
-              onClick={() =>
-                copySvgNodeAsPNG("pieCard", { fileName: "grafico-pizza.png" })
-              }
-            >
-              Copiar PNG
-            </button>
+            <div className="text-sm text-gray-400 mb-2">Participação por formato</div>
             <SimplePie data={pieData} colors={currentPalette} />
           </div>
           <div className="card p-4">
-            <div className="text-sm text-gray-400 mb-2">
-              Intensidade por região
-            </div>
-            <button
-              className="btn btn-secondary"
-              onClick={() =>
-                copySvgNodeAsPNG("barCard", { fileName: "grafico-barras.png" })
-              }
-            >
-              Copiar PNG
-            </button>
+            <div className="text-sm text-gray-400 mb-2">Intensidade por região</div>
             <SimpleBar data={barData} colors={currentPalette} />
           </div>
         </div>
       </div>
 
-      {/* Footer fixo */}
+      {/* Footer */}
       <Footer
         left={<button onClick={onBack} className="btn btn-secondary">Voltar</button>}
         center={<span className="chip">Preview (fictício)</span>}
-        right={<button onClick={exportCSV} className="btn btn-primary">Exportar CSV</button>}
+        right={
+          <div className="flex gap-2">
+            <button onClick={exportCSV} className="btn btn-secondary">Exportar CSV</button>
+            <button onClick={exportExcel} className="btn btn-primary">Exportar Excel</button>
+          </div>
+        }
       />
     </>
   );

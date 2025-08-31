@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
+import MapaBrasil from "../components/MapaBrasil"; // novo componente
 
 export default function Onboarding({ onContinue }) {
   return (
     <div className="w-full flex flex-col p-6 lg:p-10 space-y-8">
+      {/* Título animado */}
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -11,6 +13,21 @@ export default function Onboarding({ onContinue }) {
         Bem-vindo de volta!
       </motion.h2>
 
+      {/* Seção com base de dados + mapa */}
+      <div className="card flex flex-col md:flex-row items-center justify-between gap-6 p-6">
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold">Última base utilizada:</h3>
+          <p className="text-gray-400 mb-3">Base Brasil Pro 2023</p>
+          <button className="btn btn-primary">Entrar</button>
+        </div>
+
+        {/* Mapa do Brasil */}
+        <div className="flex-1 max-w-sm">
+          <MapaBrasil />
+        </div>
+      </div>
+
+      {/* Atalhos principais */}
       <div className="grid md:grid-cols-3 gap-6">
         <div
           onClick={onContinue}
@@ -26,6 +43,7 @@ export default function Onboarding({ onContinue }) {
         </div>
       </div>
 
+      {/* Projetos recentes */}
       <div>
         <h3 className="text-xl font-semibold mb-4">Projetos Recentes</h3>
         <div className="grid md:grid-cols-2 gap-4">

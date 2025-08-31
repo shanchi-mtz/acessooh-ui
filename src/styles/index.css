@@ -86,8 +86,6 @@ body {
          hover:bg-gray-300 dark:hover:bg-gray-600;
 }
 
-
-
 /* Chips */
 .chip {
   @apply px-3 py-1 rounded-lg 
@@ -148,7 +146,6 @@ body {
   @apply px-3 pb-3 space-y-2 border-t border-gray-200 dark:border-gray-900;
 }
 
-
 /* ============================
    Botões de filtro / seleção
    ============================ */
@@ -171,7 +168,6 @@ body {
          dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700
          hover:bg-gray-300 dark:hover:bg-gray-700;
 }
-
 
 /* ============================
    Chips e indicadores
@@ -213,16 +209,63 @@ body {
   @apply border-t border-gray-200 dark:border-gray-800;
 }
 
-
 /* Footer */
 .footer {
   @apply surface border-t border-gray-200 dark:border-gray-700;
 }
-
 
 /* Checkbox custom */
 .checkbox {
   @apply w-4 h-4 rounded border border-gray-400 
          text-yellow-500 focus:ring-yellow-400 
          dark:border-gray-600 dark:bg-gray-800;
+}
+
+/* ============================
+   Drawer Mobile
+   ============================ */
+
+.mobile-drawer {
+  @apply fixed top-0 left-0 h-full w-64 z-50 shadow-lg 
+         transform transition-transform duration-300 
+         bg-white text-gray-900  /* padrão claro */
+         dark:bg-gray-900 dark:text-white; /* escuro */
+}
+
+.mobile-drawer-header {
+  @apply flex items-center justify-between p-4 border-b 
+         border-gray-200 dark:border-gray-700;
+}
+
+/* Overlay (fundo escuro atrás do menu aberto) */
+.mobile-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 z-40;
+}
+
+/* ===== Ajustes do layout para mobile ===== */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    display: none; /* esconde sidebar fixa */
+  }
+
+  .content {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* quando o menu mobile abre, ele fica sobreposto */
+  .topbar-nav {
+    position: absolute;
+    top: 56px; /* altura do header */
+    left: 0;
+    width: 80%;
+    height: calc(100vh - 56px);
+    background-color: #0f172a; /* bg dark */
+    border-right: 1px solid #1e293b;
+    z-index: 50;
+  }
 }

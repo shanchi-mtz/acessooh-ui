@@ -1,5 +1,5 @@
-import { Home, Database, SlidersHorizontal, LineChart, BookOpen, Menu } from 'lucide-react'
-import { useState } from 'react'
+import { Home, Database, SlidersHorizontal, LineChart, BookOpen, Menu, X } from "lucide-react"
+import { useState } from "react"
 
 export default function Sidebar({ current, setCurrent }) {
   const [open, setOpen] = useState(false)
@@ -24,22 +24,38 @@ export default function Sidebar({ current, setCurrent }) {
           <div className="logo">
             Acesso<span className="text-yellow-400">OH</span>
           </div>
-          <button onClick={() => setOpen(!open)} className="btn btn-secondary">
-            <Menu size={16} />
+          <button onClick={() => setOpen(true)} className="btn btn-secondary">
+            <Menu size={18} />
           </button>
         </div>
-        {open && (
-          <div className="topbar-nav">
-            <div className="flex flex-col">
+      </div>
+
+      {/* Drawer mobile */}
+      {open && (
+        <>
+          {/* Overlay escuro */}
+          <div className="mobile-overlay" onClick={() => setOpen(false)} />
+
+          {/* Drawer */}
+          <div className="mobile-drawer">
+            <div className="mobile-drawer-header">
+              <div className="logo">
+                Acesso<span className="text-yellow-400">OH</span>
+              </div>
+              <button onClick={() => setOpen(false)} className="btn btn-secondary">
+                <X size={18} />
+              </button>
+            </div>
+            <nav className="nav p-4 space-y-2">
               <Item id="home" icon={Home} label="Home" />
               <Item id="base" icon={Database} label="Base de Dados" />
               <Item id="filtros" icon={SlidersHorizontal} label="Filtros & Target" />
               <Item id="preview" icon={LineChart} label="Pré-visualização" />
               <Item id="docs" icon={BookOpen} label="Tutoriais" />
-            </div>
+            </nav>
           </div>
-        )}
-      </div>
+        </>
+      )}
 
       {/* Sidebar desktop */}
       <aside className="sidebar">
