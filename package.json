@@ -7,7 +7,8 @@
   "dev": "vite",
   "build": "vite build",
   "preview": "vite preview",
-  "deploy": "gh-pages -d dist --no-history"
+  "deploy": "gh-pages -d dist --no-history",
+  "publish": "git push origin `git subtree split --prefix dist main`:gh-pages --force"
 },
   "dependencies": {
     "framer-motion": "^11.2.6",
