@@ -29,13 +29,10 @@ export default function Onboarding({ onContinue }) {
 
       {/* Atalhos principais */}
       <div className="grid md:grid-cols-3 gap-6">
-        <div
-          onClick={onContinue}
-          className="card p-6 hover:bg-gray-800 cursor-pointer text-center"
-        >
-          <div className="text-yellow-400 text-lg font-semibold">Novo Projeto</div>
+        <div onClick={onContinue} className="card p-6 hover:bg-gray-800 cursor-pointer text-center">
+          <div className="text-black-400 text-lg font-semibold">Novo Projeto</div>
         </div>
-        <div className="card p-6 hover:bg-gray-800 cursor-pointer text-center">
+        <div className="card p-6 hover:bg-yellow-800 cursor-pointer text-center">
           <div className="text-yellow-400 text-lg font-semibold">Abrir Histórico</div>
         </div>
         <div className="card p-6 hover:bg-gray-800 cursor-pointer text-center">

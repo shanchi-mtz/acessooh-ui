@@ -3,13 +3,15 @@
   "private": true,
   "version": "0.0.5",
   "type": "module",
+
 "scripts": {
   "dev": "vite",
   "build": "vite build",
   "preview": "vite preview",
-  "deploy": "gh-pages -d dist --no-history",
-  "publish": "git push origin `git subtree split --prefix dist main`:gh-pages --force"
+  "publish": "git subtree push --prefix dist origin gh-pages",
+  "publish:force": "git push origin $(git subtree split --prefix dist main):gh-pages --force"
 },
+
   "dependencies": {
     "framer-motion": "^11.2.6",
     "lucide-react": "^0.460.0",
@@ -18,6 +20,7 @@
     "react-simple-maps": "^3.0.0",
     "xlsx": "^0.18.5"
   },
+
   "devDependencies": {
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
