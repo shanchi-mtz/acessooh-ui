@@ -9,7 +9,9 @@
   "build": "vite build",
   "preview": "vite preview",
   "publish": "git subtree push --prefix dist origin gh-pages",
-  "publish:force": "git push origin $(git subtree split --prefix dist main):gh-pages --force"
+  "publish:force": "git push origin $(git subtree split --prefix dist main):gh-pages --force",
+  "deploy": "npm run build && git push origin $(git subtree split --prefix dist main):gh-pages --force"
+
 },
 
   "dependencies": {
