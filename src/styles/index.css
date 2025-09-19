@@ -269,3 +269,15 @@ body {
     z-index: 50;
   }
 }
+
+
+
+
+.nav-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #9ca3af; /* cinza discreto */
+  margin: 1rem 0 0.5rem 0.75rem;
+  letter-spacing: 0.05em;
+}

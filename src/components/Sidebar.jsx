@@ -1,4 +1,15 @@
-import { Home, Database, SlidersHorizontal, LineChart, BookOpen, Menu, X } from "lucide-react"
+import { 
+  Home, 
+  Database, 
+  SlidersHorizontal, 
+  LineChart, 
+  BookOpen, 
+  Map, 
+  Layers, 
+  Filter, 
+  Menu, 
+  X 
+} from "lucide-react"
 import { useState } from "react"
 
 export default function Sidebar({ current, setCurrent }) {
@@ -14,6 +25,12 @@ export default function Sidebar({ current, setCurrent }) {
     >
       <Icon size={18} /> <span>{label}</span>
     </a>
+  )
+
+  const Label = ({ text }) => (
+    <div className="nav-label">
+      {text}
+    </div>
   )
 
   return (
@@ -33,10 +50,7 @@ export default function Sidebar({ current, setCurrent }) {
       {/* Drawer mobile */}
       {open && (
         <>
-          {/* Overlay escuro */}
           <div className="mobile-overlay" onClick={() => setOpen(false)} />
-
-          {/* Drawer */}
           <div className="mobile-drawer">
             <div className="mobile-drawer-header">
               <div className="logo">
@@ -47,11 +61,17 @@ export default function Sidebar({ current, setCurrent }) {
               </button>
             </div>
             <nav className="nav p-4 space-y-2">
+              <Label text="TGI" />
               <Item id="home" icon={Home} label="Home" />
               <Item id="base" icon={Database} label="Base de Dados" />
               <Item id="filtros" icon={SlidersHorizontal} label="Filtros & Target" />
               <Item id="preview" icon={LineChart} label="Pré-visualização" />
               <Item id="docs" icon={BookOpen} label="Tutoriais" />
+
+              <Label text="Geofusion" />
+              <Item id="mapoteca" icon={Map} label="Mapoteca" />
+              <Item id="criar-camada" icon={Layers} label="Criar Camada" />
+              <Item id="filtros-geo" icon={Filter} label="Filtros Geográficos" />
             </nav>
           </div>
         </>
@@ -63,11 +83,17 @@ export default function Sidebar({ current, setCurrent }) {
           Acesso<span className="text-yellow-400">OH</span>
         </div>
         <nav className="nav">
+          <Label text="TGI" />
           <Item id="home" icon={Home} label="Home" />
           <Item id="base" icon={Database} label="Base de Dados" />
           <Item id="filtros" icon={SlidersHorizontal} label="Filtros & Target" />
           <Item id="preview" icon={LineChart} label="Pré-visualização" />
           <Item id="docs" icon={BookOpen} label="Tutoriais" />
+
+          <Label text="Geofusion" />
+          <Item id="mapoteca" icon={Map} label="Mapoteca" />
+          <Item id="criar-camada" icon={Layers} label="Criar Camada" />
+          <Item id="filtros-geo" icon={Filter} label="Filtros Geográficos" />
         </nav>
         <div className="version">v0.0.5 • protótipo</div>
       </aside>
