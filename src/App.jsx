@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar.jsx";
 import LoginOnboarding from "./screens/Login.jsx";
 import SelectDatabase from "./screens/SelectDatabase.jsx";
@@ -7,15 +7,21 @@ import Preview from "./screens/Preview.jsx";
 import Header from "./components/Header.jsx";
 import Onboarding from "./screens/Onboarding.jsx";
 import Mapoteca from "./screens/Mapoteca.jsx";
-import MapaAberto from "./screens/MapaAberto.jsx";
-import CriarCamada from "./screens/CriarCamada.jsx";
-import ConfigCamada from "./screens/ConfigCamada.jsx";
 import TabelaDados from "./screens/TabelaDados.jsx";
+import MapaMunicipios from "./screens/MapaMunicipios.jsx";
 
 export default function App() {
   const [screen, setScreen] = useState("home");
   const [loggedIn, setLoggedIn] = useState(false);
   const [municipiosSelecionados, setMunicipiosSelecionados] = useState([]);
+  const [mapaAtivo, setMapaAtivo] = useState(null); // guarda info do mapa aberto/criado
+
+  // ✅ Guarda: se tentar ir para o editor sem mapa, volta para a Mapoteca
+  useEffect(() => {
+    if (screen === "criar-camada" && !mapaAtivo) {
+      setScreen("mapoteca");
+    }
+  }, [screen, mapaAtivo]);
 
   if (!loggedIn) {
     return (
@@ -34,7 +40,9 @@ export default function App() {
         <Header />
 
         {/* 🔥 TGI */}
-        {screen === "home" && <Onboarding onContinue={() => setScreen("base")} />}
+        {screen === "home" && (
+          <Onboarding onContinue={() => setScreen("base")} />
+        )}
         {screen === "base" && (
           <SelectDatabase
             onContinue={() => setScreen("filtros")}
@@ -47,39 +55,52 @@ export default function App() {
             onContinue={() => setScreen("preview")}
           />
         )}
-        {screen === "preview" && <Preview onBack={() => setScreen("filtros")} />}
+        {screen === "preview" && (
+          <Preview onBack={() => setScreen("filtros")} />
+        )}
 
         {/* 🔥 Geofusion */}
-        {screen === "mapoteca" && <Mapoteca onOpenMap={() => setScreen("mapa")} />}
-        {screen === "mapa" && <MapaAberto onCreateLayer={() => setScreen("criar-camada")} />}
-
-        {/* 👉 Criação de camada */}
-        {screen === "criar-camada" && (
-          <CriarCamada
-            onBack={() => setScreen("mapa")}
-            onContinue={(municipios) => {
-              console.log("Municípios escolhidos:", municipios);
-              setMunicipiosSelecionados(municipios); // salva no estado
-              setScreen("config-camada"); // vai pra próxima tela
+        {screen === "mapoteca" && (
+          <Mapoteca
+            onOpenMap={(mapa) => {
+              setMapaAtivo(mapa);
+              setScreen("criar-camada");
+            }}
+            onCreateNewMap={(novoMapa) => {
+              setMapaAtivo(novoMapa);
+              setScreen("criar-camada");
             }}
           />
         )}
 
-        {/* 👉 Configuração da camada */}
-        {screen === "config-camada" && (
-          <ConfigCamada
-            municipios={municipiosSelecionados}
-            onBack={() => setScreen("criar-camada")}
-            onContinue={() => setScreen("tabela-dados")} // agora leva pra tabela
-            onFinish={() => setScreen("mapa")}
+        {/* Editor de camadas (só renderiza se houver mapaAtivo) */}
+        {screen === "criar-camada" && mapaAtivo && (
+          <MapaMunicipios
+            nomeMapa={mapaAtivo?.nome}
+            onBack={() => {
+              setMapaAtivo(null);          // limpa o mapa ativo
+              setScreen("mapoteca");       // volta para escolher mapa
+            }}
+            onContinue={(camadas) => {
+              // camadas = array vindo do editor; consolidar todos os municípios
+              const todosMunicipios = Array.from(
+                new Set(
+                  (camadas || [])
+                    .flatMap((c) => c?.selecionados || [])
+                    .filter(Boolean)
+                )
+              );
+              setMunicipiosSelecionados(todosMunicipios);
+              setScreen("tabela-dados");
+            }}
           />
         )}
 
-        {/* 👉 Tabela de dados */}
+        {/* Tabela de dados final */}
         {screen === "tabela-dados" && (
           <TabelaDados
             municipios={municipiosSelecionados}
-            onBack={() => setScreen("config-camada")}
+            onBack={() => setScreen("criar-camada")}
           />
         )}
       </main>
