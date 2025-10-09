@@ -4,7 +4,7 @@ import LoginOnboarding from "./screens/login.jsx";
 import SelectDatabase from "./screens/SelectDatabase.jsx";
 import FiltersTarget from "./screens/FiltersTarget.jsx";
 import Preview from "./screens/Preview.jsx";
-import Header from "./components/Header.jsx";
+import Header from "./components/header.jsx";
 import Onboarding from "./screens/onboarding.jsx";
 import Mapoteca from "./screens/mapoteca.jsx";
 import TabelaDados from "./screens/TabelaDados.jsx";
