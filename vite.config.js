@@ -10,5 +10,6 @@ export default defineConfig({
   optimizeDeps: {
     include: ["react-map-gl", "mapbox-gl"], // força Vite a pré-bundlar
   },
-  base: "/acessooh-ui/", // 👈 mantém suporte ao GitHub Pages
+  //base: "/acessooh-ui/", // 👈 mantém suporte ao GitHub Pages
+  base: "./", // 👈 mantém suporte ao GitHub Pages
 });
