@@ -306,3 +306,17 @@ body {
 .animate-fadeInOut {
   animation: fadeInOut 5s ease-in-out forwards;
 }
+
+
+/* Scrollbar fininho – opcional */
+.thin-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35); /* slate-400/35 */
+  border-radius: 999px;
+}
