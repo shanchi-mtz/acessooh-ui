@@ -6,16 +6,36 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Dark mode toggle
+  // 🔹 Inicializa o tema com base no localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+
+    if (!savedTheme) {
+      // se for a primeira vez, inicia em dark
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+      setDarkMode(true);
+    } else if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+      setDarkMode(true);
+    } else {
+      document.documentElement.classList.remove("dark");
+      setDarkMode(false);
+    }
+  }, []);
+
+  // 🔹 Aplica o tema quando darkMode mudar
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
   }, [darkMode]);
 
-  // Fecha dropdown se clicar fora
+  // 🔹 Fecha dropdown se clicar fora
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

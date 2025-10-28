@@ -54,7 +54,9 @@ export default function Sidebar({ current, setCurrent }) {
           <div className="mobile-drawer">
             <div className="mobile-drawer-header">
               <div className="logo">
-                Acesso<span className="text-yellow-400">OH</span>
+<span className="text-yellow-500 dark:text-yellow-300 font-bold">
+  Acesso<span className="text-white">OH</span>
+</span>
               </div>
               <button onClick={() => setOpen(false)} className="btn btn-secondary">
                 <X size={18} />
@@ -80,7 +82,9 @@ export default function Sidebar({ current, setCurrent }) {
       {/* Sidebar desktop */}
       <aside className="sidebar">
         <div className="logo">
-          Acesso<span className="text-yellow-400">OH</span>
+<span className="text-yellow-500 dark:text-yellow-300 font-bold">
+  Acesso<span className="text-white">OH</span>
+</span>
         </div>
         <nav className="nav">
           <Label text="TGI" />

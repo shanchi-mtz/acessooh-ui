@@ -2,21 +2,22 @@ import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar.jsx";
 import LoginOnboarding from "./screens/login.jsx";
 import SelectDatabase from "./screens/SelectDatabase.jsx";
-import FiltersTarget from "./screens/FiltersTarget.jsx";
-import Preview from "./screens/Preview.jsx";
+// import FiltersTarget from "./screens/FiltersTarget.jsx"; // ⛔ desativado neste fluxo
+// import Preview from "./screens/Preview.jsx";              // ⛔ se quiser, reativa depois
 import Header from "./components/header.jsx";
 import Onboarding from "./screens/onboarding.jsx";
 import Mapoteca from "./screens/mapoteca.jsx";
 import TabelaDados from "./screens/TabelaDados.jsx";
 import MapaMunicipios from "./screens/MapaMunicipios.jsx";
+import TGIBuilder from "./screens/TGIBuilder.jsx"; // ✅ tela nova
 
 export default function App() {
   const [screen, setScreen] = useState("home");
   const [loggedIn, setLoggedIn] = useState(false);
   const [municipiosSelecionados, setMunicipiosSelecionados] = useState([]);
-  const [mapaAtivo, setMapaAtivo] = useState(null); // guarda info do mapa aberto/criado
+  const [mapaAtivo, setMapaAtivo] = useState(null);
 
-  // ✅ Guarda: se tentar ir para o editor sem mapa, volta para a Mapoteca
+  // impede abrir editor sem mapa
   useEffect(() => {
     if (screen === "criar-camada" && !mapaAtivo) {
       setScreen("mapoteca");
@@ -39,27 +40,21 @@ export default function App() {
       <main className="content text-gray-900 dark:text-gray-100">
         <Header />
 
-        {/* 🔥 TGI */}
-        {screen === "home" && (
-          <Onboarding onContinue={() => setScreen("base")} />
-        )}
+        {/* 🏠 Home / Onboarding */}
+        {screen === "home" && <Onboarding onContinue={() => setScreen("base")} />}
+
+        {/* 🧭 Seleção da Base → agora vai direto para o TGIBuilder */}
         {screen === "base" && (
           <SelectDatabase
-            onContinue={() => setScreen("filtros")}
+            onContinue={() => setScreen("tgi-builder")} // ⬅️ aqui é a mudança
             onBack={() => setScreen("home")}
           />
         )}
-        {screen === "filtros" && (
-          <FiltersTarget
-            onBack={() => setScreen("base")}
-            onContinue={() => setScreen("preview")}
-          />
-        )}
-        {screen === "preview" && (
-          <Preview onBack={() => setScreen("filtros")} />
-        )}
 
-        {/* 🔥 Geofusion */}
+        {/* 🧱 NOVA ETAPA: Construtor TGI (Linhas & Colunas) */}
+        {screen === "tgi-builder" && <TGIBuilder />}
+
+        {/* 📍 Geofusion */}
         {screen === "mapoteca" && (
           <Mapoteca
             onOpenMap={(mapa) => {
@@ -73,22 +68,17 @@ export default function App() {
           />
         )}
 
-        {/* Editor de camadas (só renderiza se houver mapaAtivo) */}
+        {/* ✏️ Editor de Camadas (só com mapa ativo) */}
         {screen === "criar-camada" && mapaAtivo && (
           <MapaMunicipios
             nomeMapa={mapaAtivo?.nome}
             onBack={() => {
-              setMapaAtivo(null);          // limpa o mapa ativo
-              setScreen("mapoteca");       // volta para escolher mapa
+              setMapaAtivo(null);
+              setScreen("mapoteca");
             }}
             onContinue={(camadas) => {
-              // camadas = array vindo do editor; consolidar todos os municípios
               const todosMunicipios = Array.from(
-                new Set(
-                  (camadas || [])
-                    .flatMap((c) => c?.selecionados || [])
-                    .filter(Boolean)
-                )
+                new Set((camadas || []).flatMap((c) => c?.selecionados || []).filter(Boolean))
               );
               setMunicipiosSelecionados(todosMunicipios);
               setScreen("tabela-dados");
@@ -96,13 +86,24 @@ export default function App() {
           />
         )}
 
-        {/* Tabela de dados final */}
+        {/* 📄 Tabela de dados final */}
         {screen === "tabela-dados" && (
           <TabelaDados
             municipios={municipiosSelecionados}
             onBack={() => setScreen("criar-camada")}
           />
         )}
+
+        {/*
+          🔌 Telas abaixo ficam comentadas no novo fluxo:
+          {screen === "filtros" && (
+            <FiltersTarget
+              onBack={() => setScreen("base")}
+              onContinue={() => setScreen("preview")}
+            />
+          )}
+          {screen === "preview" && <Preview onBack={() => setScreen("filtros")} />}
+        */}
       </main>
     </div>
   );
