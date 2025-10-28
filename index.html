@@ -1,11 +1,20 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
+    <script>
+      if (
+        localStorage.getItem('theme') === 'dark' ||
+        !localStorage.getItem('theme')
+      ) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AcessoOH • UI</title>
-    <script type="module" crossorigin src="/acessooh-ui/assets/index-BhfRWTiX.js"></script>
-    <link rel="stylesheet" crossorigin href="/acessooh-ui/assets/index-C9R1LRf1.css">
+    <title>AcessoOH</title>
+    <script type="module" crossorigin src="./assets/index-DMImPUVn.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DWdNWej5.css">
   </head>
   <body>
     <div id="root"></div>
